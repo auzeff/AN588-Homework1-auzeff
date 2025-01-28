@@ -1,0 +1,161 @@
+---
+title: "AN 588 Homework 1"
+author: "Akiva Zeff"
+date: "2025-01-26"
+output: 
+  html_document:
+    theme: journal
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+***
+***
+# Module 4 Challenges
+***
+***
+## Challenge 1:
+***
+First, I create a single string containing the entire sentence.  I decided to go fancy and remove all punctuation:
+```{r}
+ulysses <- "Stately, plump Buck Mulligan came from the stairhead, bearing a bowl of lather on which a mirror and a razor lay crossed."
+
+# removing punctuation
+gsub("[[:punct:]]","",ulysses)
+ulysses
+```
+
+Next, I create a vector by dividing my string into its individual words using *strsplit( )*.  **However, using *strsplit( )* on its own will create a list of each word.**  I adjust for this by using *unlist( )*, which simplifies the list into a vector:
+```{r}
+ulysses2 <- unlist(strsplit(ulysses, " ")) # I'm splitting the string at all spaces
+ulysses2
+```
+
+Finally, I need to extract every third word.  I chose to use the *length( )* function to define the end of the extraction sequence.  This means that it will work as intended even if the length of the original string is increased:
+```{r}
+ulysses3 <- ulysses2[seq(from = 3, to = length(ulysses2), by = 3)]
+ulysses3
+```
+
+***
+## Challenge 2:
+***
+I start with the matrix from the module:
+```{r}
+m <- matrix(data = 1:80, nrow = 8, ncol = 10, byrow = FALSE)
+m
+```
+
+Extracting columns 2, 3, and 6:
+```{r}
+x <- m[, c(2, 3, 6)] # The comma at the beginning of the bracket allows me to only select for columns
+x
+```
+
+Extracting rows 6-8:
+```{r}
+x <- m[c(6:8), ] # Again, the comma specifies that I want rows
+x
+```
+
+Extracting row 2, column 2 to row 6, column 9:
+```{r}
+x <- m[c(2:6), c(2:9)]
+x
+```
+
+***
+## Challenge 3:
+***
+Making the array:
+```{r}
+a <- array(data = 400:1, dim = c(5, 5, 4, 4))
+# "400:1" is descending order
+```
+
+Results of various extractions (in separate chunks for ease of running individually):
+```{r, eval = FALSE}
+a[1, 1, 1, 2]
+a
+# I chose not to include the results of these chunks within my knit document because they're so long.  Feel free to run them on your own!
+```
+```{r, eval = FALSE}
+a[2, 3, 2, ]
+a
+```
+```{r, eval = FALSE}
+a[1:5, 1:5, 3, 3]
+a
+```
+
+***
+## Challenge 4:
+***
+I work from smallest to largest, start by defining the taxa within Anthropoidea and combining them into a list:
+```{r}
+Platyrrhini <- c("Cebidae", "Atelidae", "Pitheciidae")
+Catarrhini <- c("Cercopithecidae", "Hylobatidae", "Hominidae")
+Anthropoidea <- list(Platyrrhini, Catarrhini)
+names(Anthropoidea) <- list("Platyrrhini", "Catarrhini")
+Anthropoidea
+```
+
+I repeat the same procedure for Tarsioidea, and then combine them into a larger list encompassing all of Haplorhini:
+```{r}
+Tarsioidea <- "Tarsiidae"
+Tarsioidea
+
+Haplorhini <- list(Anthropoidea, Tarsioidea)
+names(Haplorhini) <- list("Anthropoidea", "Tarsioidea")
+Haplorhini
+```
+
+For Strepsirhini, I simply use the code given in the module:
+```{r}
+Lemuroidea <- c("Cheirogaleidae", "Lepilemuridae", "Indriidae", "Lemuridae",
+    "Daubentoniidae")
+Lorisoidea <- c("Lorisidae", "Galagidae")
+Strepsirhini <- list(Lemuroidea, Lorisoidea)
+names(Strepsirhini) <- list("Lemuroidea", "Lorisoidea")
+Strepsirhini
+```
+
+Finally, I combine both lists into one large "Primates" list:
+```{r}
+Primates <- list(Haplorhini, Strepsirhini)
+names(Primates) <- list("Haplorhini", "Strepsirhini")
+Primates
+```
+
+***
+## Challenge 5:
+***
+First, I create the matrix:
+```{r}
+m3 <- matrix(data = c(3, 0, 1 ,23, 1, 2, 33, 1, 1, 42, 0, 1, 41, 0, 2), nrow = 5, ncol = 3, byrow = TRUE) # "byrow = TRUE" must be included, as bycol is the default
+m3
+```
+
+Next, I coerce it into a data frame:
+```{r}
+df = data.frame(m3)
+df
+```
+
+I use the *$ operator* to specify that I only want coerce the second column to be logical-valued:
+```{r}
+df$X2 <- as.logical(df$X2) #"X2" is the default name given to my second column
+df
+```
+
+I do more or less the same thing to coerce the third column to be factor-valued:
+```{r}
+df$X3 <- as.factor(df$X3)
+df
+```
+
+Finally, I check the data type of each variable using *str( )*:
+```{r}
+str(df)
+```
